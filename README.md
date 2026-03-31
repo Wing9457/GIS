@@ -20,8 +20,8 @@
 
 | 日期 | 学习内容 | 时长 | 代码/笔记 |
 |:---|:---|:---|:---|
-| 2026.04.01 | 登录GitHub，搭建仓库 | 20min | 本页面 |
-| 2026.04.02 | JavaScript变量学习 | - | - |
+| 2026.03.29 | 登录GitHub，搭建仓库 | 20min | 本页面 |
+| 2026.03.30 | JavaScript变量学习 | 1h | Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day02-variables.js |
 
 ## 本周目标
 - [ ] 理解变量声明（var/let/const）
