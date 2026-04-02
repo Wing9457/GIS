@@ -23,6 +23,7 @@
 | 2026.03.30 | 登录GitHub，搭建仓库 | 20min | 本页面 |
 | 2026.03.31 | JavaScript变量学习 | 1h | [day02-variables.js](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day02-variables.js) |
 | 2026.04.01 | JavaScript数据类型学习 | 30min | [day03-datatypes.js](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day03-datatypes.js) |
+| 2026.04.02 | JavaScript运算符学习 | 40min | [day04-operators.js](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day04-operators.js) |
 
 ## 本周目标
 - [ ] 理解变量声明（var/let/const）
