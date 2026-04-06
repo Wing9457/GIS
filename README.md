@@ -26,6 +26,7 @@
 | 2026.04.02 | JavaScript运算符学习 | 40min | [day04-operators.js](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day04-operators.js) |
 | 2026.04.04 | JavaScript条件判断学习 | 40min | [day05-condition.js](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day05-condition.js) |
 | 2026.04.05 | JavaScript条件判断学习 | 1h | [day06-loop.js](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day06-loop.js) |
+| 2026.04.06 | JavaScript条件判断学习 | 2h | [day07-project.js](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day07-project.js) |
 
 ## 本周目标
 - [ ] 理解变量声明（var/let/const）
