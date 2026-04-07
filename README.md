@@ -29,6 +29,7 @@
 | 2026.04.06 | JavaScript综合项目 | 2h | [day07-project.js](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day07-project.js) |
 | 2026.04.07 | JavaScripts数组操作 | 30min | [day08-array.js](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day08-array.js) |
 | 2026.04.07 | JavaScripts函数练习 | 30min | [day09-function.js](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day09-function.js) |
+| 2026.04.07 | Leaflet入门 | 30min | [day010-leaflet.html](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day010-leaflet.html) |
 
 ## 本周目标
 - [ ] 理解变量声明（var/let/const）
