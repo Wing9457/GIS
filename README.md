@@ -30,6 +30,7 @@
 | 2026.04.07 | JavaScripts数组操作 | 30min | [day08-array.js](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day08-array.js) |
 | 2026.04.07 | JavaScripts函数练习 | 30min | [day09-function.js](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day09-function.js) |
 | 2026.04.07 | Leaflet入门 | 30min | [day10-leaflet.html](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day10-leaflet.html) |
+| 2026.04.08 | 多标记与交互 | 30min | [day11-leaflet-advanced.html](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day11-leaflet-advanced.html) |
 
 ## 本周目标
 - [ ] 理解变量声明（var/let/const）
