@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>GeoJSON 数据加载</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { height: 100vh; width: 100%; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // 初始化地图
+        var map = L.map('map').setView([23.0288, 113.1226], 9);
+        
+        // 高德底图
+        L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+            subdomains: ['1', '2', '3', '4'],
+            attribution: '高德地图'
+        }).addTo(map);
+        
+        // ===== GeoJSON 数据（内嵌）=====
+        var citiesData = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [113.1226, 23.0288]
+                    },
+                    "properties": {
+                        "name": "佛山",
+                        "population": 950,
+                        "gdp": 12156
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [113.2644, 23.1291]
+                    },
+                    "properties": {
+                        "name": "广州",
+                        "population": 1881,
+                        "gdp": 28839
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [114.0579, 22.5431]
+                    },
+                    "properties": {
+                        "name": "深圳",
+                        "population": 1768,
+                        "gdp": 34606
+                    }
+                }
+            ]
+        };
+        
+        // ===== 加载 GeoJSON =====
+        var geoJsonLayer = L.geoJSON(citiesData, {
+            // 点样式
+            pointToLayer: function(feature, latlng) {
+                return L.circleMarker(latlng, {
+                    radius: feature.properties.population / 100,  // 人口决定大小
+                    fillColor: "#ff7800",
+                    color: "#000",
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                });
+            },
+            
+            // 每个要素的弹窗
+            onEachFeature: function(feature, layer) {
+                var props = feature.properties;
+                var popupContent = `
+                    <b>${props.name}</b><br>
+                    人口: ${props.population}万<br>
+                    GDP: ${props.gdp}亿元<br>
+                    人均: ${(props.gdp / props.population * 10000).toFixed(0)}元
+                `;
+                layer.bindPopup(popupContent);
+            }
+        }).addTo(map);
+        
+        // 缩放到数据范围
+        map.fitBounds(geoJsonLayer.getBounds());
+        
+        console.log("加载了 " + citiesData.features.length + " 个城市");
+    </script>
+</body>
+</html>
