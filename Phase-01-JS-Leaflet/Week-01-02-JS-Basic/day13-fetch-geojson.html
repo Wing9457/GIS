@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>加载外部 GeoJSON</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { height: 100vh; width: 100%; }
+        #info { 
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            background: white; 
+            padding: 10px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="info">加载中...</div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // 初始化地图
+        var map = L.map('map').setView([23.0288, 113.1226], 9);
+        
+        L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+            subdomains: ['1', '2', '3', '4'],
+            attribution: '高德地图'
+        }).addTo(map);
+        
+        // ===== 异步加载 GeoJSON =====
+        async function loadData() {
+            try {
+                // 1. 获取数据（等待网络请求完成）
+                let response = await fetch('https://geo.datav.aliyun.com/areas_v3/bound/440000_full.json');
+                
+                // 2. 检查是否成功
+                if (!response.ok) {
+                    throw new Error('网络请求失败');
+                }
+                
+                // 3. 解析 JSON（等待解析完成）
+                let geojsonData = await response.json();
+                
+                // 4. 显示在地图上
+                L.geoJSON(geojsonData, {
+                    style: {
+                        color: '#0066cc',
+                        weight: 2,
+                        fillColor: '#99ccff',
+                        fillOpacity: 0.3
+                    },
+                    onEachFeature: function(feature, layer) {
+                        layer.bindPopup(feature.properties.name || '无名称');
+                    }
+                }).addTo(map);
+                
+                // 5. 更新信息
+                document.getElementById('info').innerHTML = '加载完成';
+                console.log('加载了', geojsonData.features.length, '个要素');
+                
+            } catch (error) {
+                // 6. 错误处理
+                console.error('加载失败:', error);
+                document.getElementById('info').innerHTML = '加载失败: ' + error.message;
+            }
+        }
+        
+        // 调用函数
+        loadData();
+    </script>
+</body>
+</html>
