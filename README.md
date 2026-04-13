@@ -32,6 +32,7 @@
 | 2026.04.07 | Leaflet入门 | 30min | [day10-leaflet.html](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day10-leaflet.html) |
 | 2026.04.08 | 多标记与交互 | 30min | [day11-leaflet-advanced.html](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day11-leaflet-advanced.html) |
 | 2026.04.09 | GeoJSON数据加载与可视化 | 40min | [day12-geojson.html](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day12-geojson.html) |
+| 2026.04.13 | 异步加载外部GeoJSON | 1h | [day13-fetch-geojson.html](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day13-fetch-geojson.html) |
 
 ## 本周目标
 - [ ] 理解变量声明（var/let/const）
