@@ -1,0 +1,38 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [113.1226, 23.0288]
+      },
+      "properties": {
+        "name": "佛山",
+        "type": "制造业"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [113.2644, 23.1291]
+      },
+      "properties": {
+        "name": "广州",
+        "type": "商贸"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [114.0579, 22.5431]
+      },
+      "properties": {
+        "name": "深圳",
+        "type": "科技"
+      }
+    }
+  ]
+}
