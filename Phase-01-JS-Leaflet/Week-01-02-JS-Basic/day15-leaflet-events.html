@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Leaflet 事件交互</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body { margin: 0; padding: 0; font-family: "SimSun", serif; }
+        #map { height: 100vh; width: 100%; }
+        #info { position: absolute; top: 10px; left: 10px; background: white; padding: 10px; z-index: 1000; border: 2px solid black; }
+        .btn { margin: 3px; padding: 5px 10px; border: 1px solid black; background: white; cursor: pointer; }
+        #coords { font-family: monospace; font-size: 11px; display: block; margin: 5px 0; padding: 3px; border: 1px dashed #999; }
+        @media print { #map, .btn { display: none; } #info { position: static; width: 100%; border: 1px solid black; } }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <b>Leaflet 事件交互</b>
+        <span id="coords">纬度: --, 经度: --</span>
+        <button class="btn" onclick="startDrawPoint()">画点</button>
+        <button class="btn" onclick="startDrawLine()">画线</button>
+        <button class="btn" onclick="clearDraw()">清除</button>
+    </div>
+    <div id="map"></div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // 初始化
+        var map = L.map('map').setView([23.0288, 113.1226], 13);
+        L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', { subdomains: ['1','2','3','4'], attribution: '高德地图' }).addTo(map);
+        
+        // 图层与状态
+        var coordLayer = L.layerGroup().addTo(map), drawLayer = L.layerGroup().addTo(map);
+        var drawMode = '', linePoints = [], currentLine = null, clickTimer = null;
+        
+        // 点击事件
+        map.on('click', function(e) {
+            if (drawMode) { if (clickTimer) clearTimeout(clickTimer); clickTimer = setTimeout(function() { handleDraw(e); }, 200); return; }
+            var lat = e.latlng.lat.toFixed(6), lng = e.latlng.lng.toFixed(6);
+            document.getElementById('coords').innerHTML = '纬度: ' + lat + '<br>经度: ' + lng;
+            L.circleMarker([lat, lng], { radius: 5, color: 'red', fillColor: 'red', fillOpacity: 1 }).addTo(coordLayer).bindPopup(lat + ', ' + lng).openPopup();
+        });
+        
+        // 双击结束画线
+        map.on('dblclick', function() { if (clickTimer) { clearTimeout(clickTimer); clickTimer = null; } if (drawMode === 'line') { drawMode = ''; console.log('线条:', JSON.stringify(linePoints)); currentLine = null; } });
+        
+        // 绘制处理
+        function handleDraw(e) {
+            if (drawMode === 'point') { L.marker(e.latlng).addTo(drawLayer).bindPopup('标记'); drawMode = ''; }
+            else if (drawMode === 'line') { linePoints.push(e.latlng); if (currentLine) drawLayer.removeLayer(currentLine); currentLine = L.polyline(linePoints, { color: 'blue', weight: 4 }).addTo(drawLayer); document.getElementById('coords').innerHTML = '画线中: ' + linePoints.length + ' 个点（双击结束）'; }
+        }
+        
+        // 按钮控制
+        function startDrawPoint() { drawMode = 'point'; }
+        function startDrawLine() { drawMode = 'line'; linePoints = []; currentLine = null; }
+        function clearDraw() { drawLayer.clearLayers(); coordLayer.clearLayers(); linePoints = []; currentLine = null; drawMode = ''; document.getElementById('coords').innerHTML = '纬度: --, 经度: --'; }
+    </script>
+</body>
+</html>
