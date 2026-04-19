@@ -35,6 +35,9 @@
 | 2026.04.13 | 异步加载外部GeoJSON | 1h | [day13-fetch-geojson.html](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day13-fetch-geojson.html) |
 | 2026.04.14 | 异步加载本地GeoJSON | 1h | [day14-fetch-local.html](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day14-fetch-local.html) |
 | 2026.04.15 | Leaflet事件交互 |2h | [day15-leaflet-events.html](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day15-leaflet-events.html) |
+| 2026.04.19 | Leaflet.Draw基础绘制 |40min | [day16-basic-draw.html	](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day16-basic-draw.html	) |
+| 2026.04.19 | 图形编辑功能 |1h | [day16-edit-features.html](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day16-edit-features.html) |
+| 2026.04.19 | 本地数据持久化 |2h | [day16-save-load.html](./Phase-01-JS-Leaflet/Week-01-02-JS-Basic/day16-save-load.html) |
 
 ## 本周目标
 - [ ] 理解变量声明（var/let/const）
