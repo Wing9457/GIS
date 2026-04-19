@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Day16 - 数据持久化</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+    <style>
+        body { margin: 0; padding: 0; font-family: Arial; }
+        #map { height: 100vh; width: 100%; }
+        #toolbar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 15px;
+            z-index: 1000;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            width: 220px;
+        }
+        h3 { margin: 0 0 15px; }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .btn-primary { background: #3388ff; color: white; }
+        .btn-success { background: #48bb78; color: white; }
+        .btn-warning { background: #ed8936; color: white; }
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div id="toolbar">
+        <h3>💾 数据管理</h3>
+        <button class="btn btn-primary" onclick="exportGeoJSON()">⬇️ 导出 GeoJSON</button>
+        <button class="btn btn-success" onclick="importGeoJSON()">⬆️ 导入 GeoJSON</button>
+        <button class="btn btn-warning" onclick="saveToLocal()">💾 存到本地缓存</button>
+        <button class="btn btn-primary" onclick="loadFromLocal()">📂 从本地加载</button>
+        <div class="status" id="status">就绪</div>
+    </div>
+    <div id="map"></div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+    <script>
+        var map = L.map('map').setView([23.0288, 113.1226], 13);
+        
+        L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+            subdomains: ['1', '2', '3', '4']
+        }).addTo(map);
+        
+        var drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+        
+        // 绘制控件
+        map.addControl(new L.Control.Draw({
+            draw: {
+                polygon: { allowIntersection: false, showArea: true },
+                polyline: { metric: true, showLength: true },
+                rectangle: true,
+                circle: { showRadius: true },
+                marker: true,
+                circlemarker: false
+            },
+            edit: { featureGroup: drawnItems, remove: true }
+        }));
+        
+        // 绘制完成
+        map.on(L.Draw.Event.CREATED, function(e) {
+            var layer = e.layer;
+            layer.feature = {
+                type: 'Feature',
+                properties: {
+                    type: e.layerType,
+                    createdAt: new Date().toISOString()
+                },
+                geometry: layer.toGeoJSON ? layer.toGeoJSON().geometry : null
+            };
+            drawnItems.addLayer(layer);
+            showStatus('已添加：' + e.layerType);
+        });
+        
+        // 导出 GeoJSON
+        function exportGeoJSON() {
+            var geojson = drawnItems.toGeoJSON();
+            
+            // 处理圆形（特殊处理）
+            drawnItems.eachLayer(function(layer) {
+                if (layer.getRadius) {
+                    // 找到对应的feature，添加radius
+                    var center = layer.getLatLng();
+                    var radius = layer.getRadius();
+                    geojson.features.forEach(function(f) {
+                        if (f.geometry.type === 'Point' && 
+                            Math.abs(f.geometry.coordinates[1] - center.lat) < 0.0001) {
+                            f.properties.radius = radius;
+                        }
+                    });
+                }
+            });
+            
+            var blob = new Blob([JSON.stringify(geojson, null, 2)], 
+                              { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'map-drawings-' + new Date().toISOString().slice(0,10) + '.geojson';
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            showStatus('✅ 已导出 ' + geojson.features.length + ' 个图形');
+        }
+        
+        // 导入 GeoJSON
+        function importGeoJSON() {
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.geojson,.json';
+            
+            input.onchange = function(e) {
+                var file = e.target.files[0];
+                if (!file) return;
+                
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        var geojson = JSON.parse(event.target.result);
+                        loadGeoJSON(geojson);
+                        showStatus('✅ 已导入 ' + geojson.features.length + ' 个图形');
+                    } catch (err) {
+                        showStatus('❌ 文件解析失败');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+        
+        // 加载 GeoJSON 到地图
+        function loadGeoJSON(geojson) {
+            // 清空现有
+            drawnItems.clearLayers();
+            
+            L.geoJSON(geojson, {
+                onEachFeature: function(feature, layer) {
+                    // 恢复圆形
+                    if (feature.properties.radius && feature.geometry.type === 'Point') {
+                        var center = [feature.geometry.coordinates[1], 
+                                     feature.geometry.coordinates[0]];
+                        layer = L.circle(center, {
+                            radius: feature.properties.radius
+                        });
+                    }
+                    drawnItems.addLayer(layer);
+                }
+            });
+        }
+        
+        // 保存到 localStorage
+        function saveToLocal() {
+            var geojson = drawnItems.toGeoJSON();
+            localStorage.setItem('leafletDrawings', JSON.stringify(geojson));
+            showStatus('✅ 已保存到本地缓存（' + geojson.features.length + '个）');
+        }
+        
+        // 从 localStorage 加载
+        function loadFromLocal() {
+            var data = localStorage.getItem('leafletDrawings');
+            if (!data) {
+                showStatus('⚠️ 本地无缓存数据');
+                return;
+            }
+            
+            try {
+                var geojson = JSON.parse(data);
+                loadGeoJSON(geojson);
+                showStatus('✅ 已从本地加载 ' + geojson.features.length + ' 个图形');
+            } catch (err) {
+                showStatus('❌ 缓存数据损坏');
+            }
+        }
+        
+        // 显示状态
+        function showStatus(msg) {
+            document.getElementById('status').textContent = msg;
+        }
+        
+        // 页面加载时自动恢复
+        window.onload = function() {
+            if (localStorage.getItem('leafletDrawings')) {
+                loadFromLocal();
+            }
+        };
+    </script>
+</body>
+</html>
