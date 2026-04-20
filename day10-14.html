@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Day10-Day14 知识点总结</title>
+    <style>
+        body { margin: 0; padding: 15px; font-family: "SimSun", "宋体", serif; font-size: 10px; line-height: 1.4; }
+        h1 { text-align: center; font-size: 14px; border-bottom: 2px solid black; padding-bottom: 5px; margin: 0 0 10px; }
+        h2 { font-size: 11px; background: #e0e0e0; padding: 3px 6px; margin: 8px 0 5px; border-left: 3px solid black; }
+        table { width: 100%; border-collapse: collapse; margin: 5px 0; }
+        th, td { border: 1px solid #666; padding: 4px 6px; text-align: left; vertical-align: top; }
+        th { background: #f0f0f0; font-weight: bold; }
+        code { font-family: "Courier New", monospace; background: #f5f5f5; padding: 0 2px; }
+        .two-col { column-count: 2; column-gap: 20px; }
+        .highlight { color: #c00; font-weight: bold; }
+        @media print { body { padding: 10px; } h1 { font-size: 12px; } h2 { font-size: 10px; } }
+    </style>
+</head>
+<body>
+    <h1>Day 10 - Day 14 Leaflet 核心知识点总结</h1>
+    
+    <div class="two-col">
+    
+    <h2>Day 10 地图初始化与图层</h2>
+    <table>
+        <tr><th>知识点</th><th>代码/说明</th></tr>
+        <tr><td>创建地图</td><td><code>L.map('id').setView([lat,lng], zoom)</code></td></tr>
+        <tr><td>瓦片图层</td><td><code>L.tileLayer(url, {subdomains:['a','b']})</code></td></tr>
+        <tr><td>高德地图</td><td><code>webrd0{s}.is.autonavi.com</code></td></tr>
+        <tr><td>图层叠加顺序</td><td>tilePane → overlayPane → shadowPane → markerPane → popupPane</td></tr>
+    </table>
+    
+    <h2>Day 11 标记与弹出窗口</h2>
+    <table>
+        <tr><th>知识点</th><th>代码/说明</th></tr>
+        <tr><td>默认标记</td><td><code>L.marker([lat,lng]).addTo(map)</code></td></tr>
+        <tr><td>自定义图标</td><td><code>L.icon({iconUrl:'path.png', iconSize:[w,h]})</code></td></tr>
+        <tr><td>圆形标记</td><td><code>L.circleMarker([lat,lng], {radius:8, color:'red'})</code></td></tr>
+        <tr><td>绑定弹窗</td><td><code>.bindPopup('内容').openPopup()</code></td></tr>
+        <tr><td>点击打开</td><td><code>marker.on('click', fn)</code></td></tr>
+    </table>
+    
+    <h2>Day 12 矢量图形绘制</h2>
+    <table>
+        <tr><th>知识点</th><th>代码/说明</th></tr>
+        <tr><td>折线</td><td><code>L.polyline([[lat1,lng1],[lat2,lng2]], {color:'blue'})</code></td></tr>
+        <tr><td>多边形</td><td><code>L.polygon(coords, {fillColor:'#f00', fillOpacity:0.3})</code></td></tr>
+        <tr><td>圆形</td><td><code>L.circle([lat,lng], {radius: 500})</code> 单位：米</td></tr>
+        <tr><td>矩形</td><td><code>L.rectangle([[s,w],[n,e]])</code></td></tr>
+        <tr><td>样式选项</td><td>color, weight, opacity, fillColor, fillOpacity, dashArray</td></tr>
+    </table>
+    
+    <h2>Day 13 事件交互基础</h2>
+    <table>
+        <tr><th>知识点</th><th>代码/说明</th></tr>
+        <tr><td>地图点击</td><td><code>map.on('click', function(e){ e.latlng })</code></td></tr>
+        <tr><td>获取坐标</td><td><code>e.latlng.lat, e.latlng.lng</code></td></tr>
+        <tr><td>双击事件</td><td><code>map.on('dblclick', fn)</code></td></tr>
+        <tr><td>区分单双击</td><td><code>setTimeout + clearTimeout</code> 延迟 200ms</td></tr>
+        <tr><td>事件停止</td><td><code>L.DomEvent.stopPropagation(e)</code></td></tr>
+    </table>
+    
+    <h2>Day 14 绘制模式与图层管理</h2>
+    <table>
+        <tr><th>知识点</th><th>代码/说明</th></tr>
+        <tr><td>图层组</td><td><code>L.layerGroup()</code> 批量管理图层</td></tr>
+        <tr><td>清空图层</td><td><code>layerGroup.clearLayers()</code></td></tr>
+        <tr><td>移除单个</td><td><code>layerGroup.removeLayer(layer)</code></td></tr>
+        <tr><td>绘制状态</td><td><code>var mode=''; // 'point'|'line'|''</code></td></tr>
+        <tr><td>点数组</td><td><code>var points=[]; points.push(e.latlng)</code></td></tr>
+        <tr><td>动态更新线</td><td>删除旧线 → 画新线（保持只有一条）</td></tr>
+    </table>
+    
+    <h2>核心设计模式</h2>
+    <table>
+        <tr><th>模式</th><th>应用场景</th></tr>
+        <tr><td>状态机</td><td><code>drawMode</code> 控制当前行为</td></tr>
+        <tr><td>延迟执行</td><td><code>setTimeout</code> 区分单击/双击</td></tr>
+        <tr><td>替换更新</td><td>画线时移除旧线、添加新线</td></tr>
+        <tr><td>分层管理</td><td>坐标层 + 绘制层 分离</td></tr>
+    </table>
+    
+    <h2>常用坐标转换</h2>
+    <table>
+        <tr><th>方法</th><th>说明</th></tr>
+        <tr><td><code>latLng.toFixed(6)</code></td><td>保留6位小数</td></tr>
+        <tr><td><code>map.latLngToContainerPoint(latlng)</code></td><td>经纬度→像素点</td></tr>
+        <tr><td><code>map.containerPointToLatLng(point)</code></td><td>像素点→经纬度</td></tr>
+    </table>
+    
+    <h2>调试技巧</h2>
+    <table>
+        <tr><th>方法</th><th>用途</th></tr>
+        <tr><td><code>console.log(JSON.stringify(points))</code></td><td>输出坐标数组</td></tr>
+        <tr><td><code>map.on('moveend', fn)</code></td><td>监听视野变化</td></tr>
+        <tr><td><code>layer.bindPopup('ID:'+id)</code></td><td>显示对象标识</td></tr>
+    </table>
+    
+    </div>
+    
+    <div style="margin-top: 10px; text-align: center; font-size: 9px; color: #666;">
+        Day 10-14 基础篇完 | 后续：Day 15+ 插件应用与数据持久化
+    </div>
+</body>
+</html>

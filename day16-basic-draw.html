@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Day16 - Leaflet.Draw 基础绘制</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { height: 100vh; width: 100%; }
+        #info {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 15px;
+            z-index: 1000;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            font-family: Arial;
+            max-width: 250px;
+        }
+        h3 { margin: 0 0 10px; color: #333; }
+        .stat { font-size: 12px; color: #666; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h3>🎨 绘制工具</h3>
+        <div class="stat">点击左侧工具栏开始绘制</div>
+        <div class="stat">📐 多边形：显示面积</div>
+        <div class="stat">📏 线段：显示长度</div>
+        <div class="stat">⭕ 圆形：显示半径</div>
+        <hr>
+        <div class="stat" id="count">图形数量：0</div>
+    </div>
+    <div id="map"></div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+    <script>
+        // 初始化地图
+        var map = L.map('map').setView([23.0288, 113.1226], 13);
+        
+        L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+            subdomains: ['1', '2', '3', '4'],
+            attribution: '高德地图'
+        }).addTo(map);
+        
+        // 绘制图层
+        var drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+        
+        // 绘制控件
+        var drawControl = new L.Control.Draw({
+            draw: {
+                // 多边形：禁止交叉，显示面积
+                polygon: {
+                    allowIntersection: false,
+                    drawError: {
+                        color: '#e1e100',
+                        message: '<strong>不能交叉！</strong>'
+                    },
+                    shapeOptions: {
+                        color: '#3388ff',
+                        fillOpacity: 0.3
+                    },
+                    showArea: true
+                },
+                // 线段：显示长度
+                polyline: {
+                    shapeOptions: {
+                        color: '#3388ff',
+                        weight: 4
+                    },
+                    metric: true,
+                    showLength: true
+                },
+                // 矩形
+                rectangle: {
+                    shapeOptions: {
+                        color: '#3388ff',
+                        fillOpacity: 0.3
+                    }
+                },
+                // 圆形：显示半径
+                circle: {
+                    shapeOptions: {
+                        color: '#3388ff',
+                        fillOpacity: 0.3
+                    },
+                    showRadius: true
+                },
+                // 标记
+                marker: {
+                    icon: new L.Icon.Default()
+                },
+                // 禁用圆形标记
+                circlemarker: false
+            },
+            edit: {
+                featureGroup: drawnItems,
+                remove: true
+            }
+        });
+        map.addControl(drawControl);
+        
+        // 绘制完成事件
+        map.on(L.Draw.Event.CREATED, function(e) {
+            var layer = e.layer;
+            var type = e.layerType;
+            
+            // 添加到图层
+            drawnItems.addLayer(layer);
+            
+            // 更新统计
+            document.getElementById('count').textContent = 
+                '图形数量：' + drawnItems.getLayers().length;
+            
+            console.log('✅ 绘制完成：', type);
+        });
+        
+        // 编辑完成
+        map.on(L.Draw.Event.EDITED, function(e) {
+            var count = 0;
+            e.layers.eachLayer(function() { count++; });
+            console.log('✏️ 编辑了', count, '个图形');
+        });
+        
+        // 删除完成
+        map.on(L.Draw.Event.DELETED, function(e) {
+            document.getElementById('count').textContent = 
+                '图形数量：' + drawnItems.getLayers().length;
+            console.log('🗑️ 删除完成');
+        });
+    </script>
+</body>
+</html>
