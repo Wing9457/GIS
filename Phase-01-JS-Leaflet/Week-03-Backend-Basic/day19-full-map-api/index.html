@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>day19 全栈地图</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <style>
+        body { margin:0; padding:0; }
+        #map { height:100vh; width:100%; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    const map = L.map('map').setView([23.0288, 113.1226], 14);
+    L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+        subdomains: ['1','2','3','4'],
+        attribution: '高德地图'
+    }).addTo(map);
+
+    // 从后端加载点位
+    fetch('http://localhost:3000/api/markers')
+        .then(res => res.json())
+        .then(res => {
+            res.data.forEach(item => {
+                L.marker([item.lat, item.lng])
+                    .addTo(map)
+                    .bindPopup(item.name);
+            });
+        });
+
+    // 点击添加点位到数据库
+    map.on('click', async (e) => {
+        const name = prompt('输入点位名称：');
+        if (!name) return;
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+
+        await fetch('http://localhost:3000/api/markers', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, lat, lng })
+        });
+
+        L.marker([lat, lng]).addTo(map).bindPopup(name).openPopup();
+        alert('添加成功！');
+    });
+</script>
+</body>
+</html>
