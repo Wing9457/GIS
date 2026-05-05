@@ -48,6 +48,13 @@
 | 2026.04.19 | Leaflet.Draw图形编辑（顶点拖拽、属性修改、图层删除） | 1h | [day16-edit-features.html](./Phase-01-JS-Leaflet/Week-02-Leaflet-Basic/day16-edit-features.html) |
 | 2026.04.19 | 本地数据持久化（GeoJSON导出/导入、localStorage存储） | 2h | [day16-save-load.html](./Phase-01-JS-Leaflet/Week-02-Leaflet-Basic/day16-save-load.html) |
 | 2026.04.20 | 后端API开发（Node.js+Express） | 2h | [day17-server-api](./Phase-01-JS-Leaflet/Week-03-Backend-Basic/day17-server-api/) |
+| 2026.04.24 | MySQL数据库连接、地图点位接口开发 | 1h | [day18-mysql-api](./Phase-01-JS-Leaflet/Week-03-Backend-Basic/day18-mysql-api/) |
+| 2026.04.25 | 全栈地图联调（Leaflet+Express+MySQL增删查） | 2h | [day19-full-map-api](./Phase-01-JS-Leaflet/Week-03-Backend-Basic/day19-full-map-api/) |
+| 2026.04.29 | 地图CRUD全栈开发（增删改查完整版） | 2h | [day20-crud-full](./Phase-01-JS-Leaflet/Week-03-Backend-Basic/day20-crud-full/) |
+| 2026.04.30 | GIS全栈项目最终版（增删改查+地图管理系统） | 2h | [day21-gis-final](./Phase-01-JS-Leaflet/Week-03-Backend-Basic/day21-gis-final/) |
+| 2026.05.03 | 数据库连接池优化、接口格式统一、项目性能升级 | 1.5h | [day22-data-optimize](./Phase-01-JS-Leaflet/Week-03-Backend-Basic/day22-data-optimize/) |
+| 2026.05.05 | 后端参数校验、统一状态码、接口异常处理优化 | 1.5h | [day23-data-validate](./Phase-01-JS-Leaflet/Week-03-Backend-Basic/day23-data-validate/) |
+
 ###### \## 本周目标
 
 \- 掌握JavaScript基础语法，能完成简单逻辑练习
