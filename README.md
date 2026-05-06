@@ -54,6 +54,7 @@
 | 2026.04.30 | GIS全栈项目最终版（增删改查+地图管理系统） | 2h | [day21-gis-final](./Phase-01-JS-Leaflet/Week-03-Backend-Basic/day21-gis-final/) |
 | 2026.05.03 | 数据库连接池优化、接口格式统一、项目性能升级 | 1.5h | [day22-data-optimize](./Phase-01-JS-Leaflet/Week-03-Backend-Basic/day22-data-optimize/) |
 | 2026.05.05 | 后端参数校验、统一状态码、接口异常处理优化 | 1.5h | [day23-data-validate](./Phase-01-JS-Leaflet/Week-03-Backend-Basic/day23-data-validate/) |
+| 2026.05.06 | 全局异常处理、统一响应格式、企业级接口规范 | 1.5h | [day24-global-error](./Phase-01-JS-Leaflet/Week-03-Backend-Basic/day24-global-error/) |
 
 ###### \## 本周目标
 
