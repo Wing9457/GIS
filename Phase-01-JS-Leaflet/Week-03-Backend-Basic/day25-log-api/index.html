@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>day25 日志版地图</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <style>
+        *{margin:0;padding:0}
+        #map{width:100vw;height:100vh}
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const map = L.map('map').setView([23.0288,113.1226],14)
+L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={y}&y={y}&z={z}',{
+  subdomains:['1','2','3','4'],attribution:'高德地图'
+}).addTo(map)
+
+const markerGroup = L.layerGroup().addTo(map)
+
+async function loadMarkers(){
+  markerGroup.clearLayers()
+  let res = await fetch('http://localhost:3000/api/markers')
+  let json = await res.json()
+  json.data.forEach(item=>{
+    L.marker([item.lat,item.lng]).addTo(markerGroup).bindPopup(`
+      <strong>${item.name}</strong><br>
+      <button onclick=edit(${item.id})>修改</button>
+      <button onclick=del(${item.id})>删除</button>
+    `)
+  })
+}
+
+map.on('click',async e=>{
+  let name = prompt('输入点位名称：')
+  if(!name)return
+  await fetch('http://localhost:3000/api/markers',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name,lat:e.latlng.lat,lng:e.latlng.lng})
+  })
+  loadMarkers()
+})
+
+async function edit(id){
+  let newName = prompt('新名称：')
+  if(!newName)return
+  await fetch(`http://localhost:3000/api/markers/${id}`,{
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:newName})
+  })
+  loadMarkers()
+}
+
+async function del(id){
+  if(!confirm('确定删除？'))return
+  await fetch(`http://localhost:3000/api/markers/${id}`,{method:'DELETE'})
+  loadMarkers()
+}
+
+loadMarkers()
+</script>
+</body>
+</html>
