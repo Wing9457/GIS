@@ -57,6 +57,7 @@
 | 2026.05.06 | 全局异常处理、统一响应格式、企业级接口规范 | 1.5h | [day24-global-error](./Phase-01-JS-Leaflet/Week-03-Backend-Basic/day24-global-error/) |
 | 2026.05.07 | API请求日志、后端规范、接口优化 | 1.5h | [day25-log-api](./Phase-01-JS-Leaflet/Week-03-Backend-Basic/day25-log-api/) |
 | 2026.05.09 | Express路由模块化拆分、项目结构解耦优化 | 1.5h | [day26-split-router](./Phase-01-JS-Leaflet/Week-03-Backend-Basic/day26-split-router/) |
+| 2026.05.10 | 后端分层架构、路由控制器分离、项目结构标准化 | 1.5h | [day27-mvc-split](./Phase-01-JS-Leaflet/Week-03-Backend-Basic/day27-mvc-split/) |
 
 ###### \## 本周目标
 
